@@ -1,4 +1,4 @@
-package com.materna.application
+package com.materna
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication

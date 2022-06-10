@@ -1,8 +1,9 @@
 plugins {
     kotlin("multiplatform") version "1.6.21"
     application
-
+    kotlin("plugin.serialization") version "1.6.21"
     kotlin("plugin.spring") version "1.6.21" apply false
+    kotlin("plugin.jpa") version  "1.6.21" apply false
     id("org.springframework.boot") version "2.7.0" apply false
     id("io.spring.dependency-management") version "1.0.11.RELEASE" apply false
 }
@@ -21,6 +22,8 @@ kotlin {
         apply(plugin = "org.springframework.boot")
         apply(plugin = "io.spring.dependency-management")
         apply(plugin = "org.jetbrains.kotlin.plugin.spring")
+        apply(plugin = "org.jetbrains.kotlin.plugin.jpa")
+        apply(plugin = "org.jetbrains.kotlin.plugin.serialization")
 
         compilations.all {
             kotlinOptions.jvmTarget = "1.8"
@@ -41,7 +44,11 @@ kotlin {
         }
     }
     sourceSets {
-        val commonMain by getting
+        val commonMain by getting {
+            dependencies {
+
+            }
+        }
         val commonTest by getting {
             dependencies {
                 implementation(kotlin("test"))
@@ -51,8 +58,12 @@ kotlin {
             dependencies {
                 implementation("org.springframework.boot:spring-boot-starter-web")
                 implementation("org.springframework.boot:spring-boot-starter-security")
-                //implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+                implementation("io.arrow-kt:arrow-core:1.1.3-alpha.16")
+                implementation("org.springframework.boot:spring-boot-starter-data-jpa")
                 implementation("org.jetbrains.kotlinx:kotlinx-html-jvm:0.7.5")
+                implementation("org.postgresql:postgresql")
+                implementation("org.jetbrains.kotlin:kotlin-reflect")
+
             }
         }
         val springTest by getting
@@ -62,6 +73,8 @@ kotlin {
                 implementation("org.jetbrains.kotlin-wrappers:kotlin-react-dom:17.0.2-pre.290-kotlin-1.6.10")
                 implementation("org.jetbrains.kotlin-wrappers:kotlin-react-css:17.0.2-pre.290-kotlin-1.6.10")
                 implementation("org.jetbrains.kotlin-wrappers:kotlin-react-router-dom:6.2.1-pre.290-kotlin-1.6.10")
+                implementation("io.ktor:ktor-client-js:2.0.2")
+                implementation(npm("react-bootstrap", "2.4.0"))
             }
         }
         val reactTest by getting
@@ -69,7 +82,7 @@ kotlin {
 }
 
 application {
-    mainClass.set("com.materna.application.ServerKt")
+    mainClass.set("com.materna.ApplicationKT")
 }
 
 tasks.named<Copy>("springProcessResources") {
