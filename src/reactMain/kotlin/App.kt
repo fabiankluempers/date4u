@@ -1,16 +1,18 @@
-import kotlinx.browser.document
+import kotlinext.js.jso
 import kotlinx.coroutines.MainScope
 import react.FC
 import react.Props
-import react.dom.html.ReactHTML.button
 import react.router.dom.BrowserRouter
-import util.cookies
 
 val scope = MainScope()
 
 val Application = FC<Props> {
-    BrowserRouter {
-        NavBar()
-        MyRoutes()
+    AuthContext.Provider {
+        value =  jso { authenticated = false }
+        BrowserRouter {
+            NavBar()
+            MyRoutes()
+        }
     }
+
 }

@@ -1,8 +1,6 @@
 package com.materna.security
 
 import org.springframework.context.annotation.Bean
-import org.springframework.context.annotation.Configuration
-import org.springframework.security.config.Customizer.withDefaults
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.web.SecurityFilterChain
@@ -16,14 +14,17 @@ class SecurityConfig {
         http
             .csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()).and()
             .authorizeHttpRequests {
-                it.antMatchers("/", "/main.js").permitAll()
-                it.anyRequest().authenticated()
+                it
+                    .antMatchers("/", "/main.js").permitAll()
+                    .anyRequest().authenticated()
             }
             .formLogin {
-                it.permitAll()
-                it.loginProcessingUrl("/perform_login")
-                it.successForwardUrl("/login_success")
-                it.failureForwardUrl("/login_failure")
+                it
+                    .permitAll()
+                    .loginPage("/login/status")
+                    .loginProcessingUrl("/perform_login")
+                    .failureUrl("/login/status")
+                    .defaultSuccessUrl("/login/status", true)
             }
             .build()
 }
