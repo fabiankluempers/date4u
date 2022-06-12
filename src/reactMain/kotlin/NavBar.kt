@@ -49,7 +49,10 @@ val NavBar = FC<Props> {
                         to = "/recommended_profiles"
                     }
                     if (auth.isAuthenticated) {
-                        Logout()
+                        SimpleNavItem {
+                            label = "Logout"
+                            to = "/logout"
+                        }
                     } else {
                         SimpleNavItem {
                             label = "Login"
