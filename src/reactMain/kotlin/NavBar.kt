@@ -1,6 +1,5 @@
-import react.FC
-import react.Props
-import react.create
+import context.AuthContext
+import react.*
 import react.dom.aria.ariaControls
 import react.dom.aria.ariaExpanded
 import react.dom.aria.ariaLabel
@@ -11,10 +10,11 @@ import react.dom.html.ReactHTML.li
 import react.dom.html.ReactHTML.nav
 import react.dom.html.ReactHTML.span
 import react.dom.html.ReactHTML.ul
-import react.router.dom.Link
 import react.router.dom.NavLink
 
 val NavBar = FC<Props> {
+    val auth = useContext(AuthContext)
+
     nav {
         className = "navbar navbar-expand-lg bg-light"
         div {
@@ -48,9 +48,13 @@ val NavBar = FC<Props> {
                         label = "Recommended Unicorns"
                         to = "/recommended_profiles"
                     }
-                    SimpleNavItem {
-                        label = "Login"
-                        to = "/login"
+                    if (auth.isAuthenticated) {
+                        Logout()
+                    } else {
+                        SimpleNavItem {
+                            label = "Login"
+                            to = "/login"
+                        }
                     }
                 }
             }

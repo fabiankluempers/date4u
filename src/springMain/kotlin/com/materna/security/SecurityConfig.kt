@@ -26,5 +26,11 @@ class SecurityConfig {
                     .failureUrl("/login/status")
                     .defaultSuccessUrl("/login/status", true)
             }
+            .logout {
+                it
+                    .permitAll()
+                    .logoutUrl("/perform_logout")
+                    .logoutSuccessUrl("/login/status")
+            }
             .build()
 }

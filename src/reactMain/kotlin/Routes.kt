@@ -18,5 +18,8 @@ val MyRoutes = FC<Props> {
             path = "/login"
             element = createElement(Login)
         }
+        Route {
+            path = "/logout"
+        }
     }
 }
