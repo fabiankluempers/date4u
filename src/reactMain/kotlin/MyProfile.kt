@@ -8,14 +8,25 @@ import react.useEffectOnce
 import react.useState
 
 val MyProfile = FC<Props> {
-	var profile by useState<ProfileDTO?>(null)
-	useEffectOnce {
-		scope.launch {
-			profile = fetchMyProfile()
-		}
-	}
+    var profileState by useState<ProfileDTO?>(null)
+    useEffectOnce {
+        println("fetching")
+        scope.launch {
+            val fetchRes = fetchMyProfile()
+            println(fetchRes)
+            profileState = fetchRes
+        }
+    }
+    profileState?.let {
+        println("rendering $it")
+        Profile {
+            viewMode = ViewMode.UPDATE
+            profile = it
+            onSubmit = { println("submitted") }
+        }
+    }
 }
 
 val fetchMyProfile = suspend {
-	client.get("/myProfile").body() as ProfileDTO
+    client.get("/myProfile").body<ProfileDTO>()
 }

@@ -2,7 +2,9 @@ package dto
 
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class ProfileDTO(
 	val nickname : String,
 	val hornLength: Int,
