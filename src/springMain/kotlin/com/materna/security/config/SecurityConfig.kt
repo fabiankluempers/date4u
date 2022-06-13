@@ -1,4 +1,4 @@
-package com.materna.security
+package com.materna.security.config
 
 import org.springframework.context.annotation.Bean
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
@@ -8,7 +8,6 @@ import org.springframework.security.web.csrf.CookieCsrfTokenRepository
 
 @EnableWebSecurity
 class SecurityConfig {
-
     @Bean
     fun filterChain(http: HttpSecurity): SecurityFilterChain =
         http
@@ -30,7 +29,7 @@ class SecurityConfig {
                 it
                     .permitAll()
                     .logoutUrl("/perform_logout")
-                    .logoutSuccessUrl("/login/status")
+                    //.logoutSuccessUrl("/login/status")
             }
             .build()
 }

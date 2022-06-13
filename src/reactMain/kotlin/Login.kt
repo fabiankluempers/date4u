@@ -1,6 +1,4 @@
 import context.AuthContext
-import io.ktor.client.*
-import io.ktor.client.engine.js.*
 import io.ktor.client.request.forms.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
@@ -14,7 +12,7 @@ import react.dom.html.ReactHTML.h1
 import react.dom.html.ReactHTML.input
 import react.dom.html.ReactHTML.label
 import react.router.useNavigate
-import util.cookies
+import util.COOKIES
 
 private const val LOGIN_URL = "/perform_login"
 
@@ -70,7 +68,7 @@ val Login = FC<Props> {
 						formParameters = Parameters.build {
 							append("username", username)
 							append("password", password)
-							append("_csrf", cookies["XSRF-TOKEN"] ?: "")
+							append("_csrf", COOKIES["XSRF-TOKEN"] ?: "")
 						}).bodyAsText()
 					if (response == "true") {
 						auth.setAuthenticated(true)
