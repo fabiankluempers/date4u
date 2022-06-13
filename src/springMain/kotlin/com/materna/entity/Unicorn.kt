@@ -1,5 +1,6 @@
 package com.materna.entity
 
+import dto.ProfileDTO
 import org.hibernate.Hibernate
 import javax.persistence.*
 

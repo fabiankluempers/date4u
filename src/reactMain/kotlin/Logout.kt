@@ -1,8 +1,7 @@
 import context.AuthContext
+import dto.LoginState
+import io.ktor.client.call.*
 import io.ktor.client.request.*
-import io.ktor.client.statement.*
-import io.ktor.http.*
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import react.*
 import react.dom.html.ReactHTML.div
@@ -18,14 +17,11 @@ val Logout = FC<Props> {
 
 	useEffectOnce {
 		scope.launch {
-			delay(3000L)
-			if (client.post {
-					url(LOGOUT_URL)
-					headers {
-						append("X-XSRF-TOKEN", COOKIES["XSRF-TOKEN"] ?: "")
-					}
-				}.bodyAsText() == "false"
-			) {
+			val loginState : LoginState = client.post {
+				url(LOGOUT_URL)
+				headers { append("X-XSRF-TOKEN", COOKIES["XSRF-TOKEN"] ?: "") }
+			}.body()
+			if (!loginState.isLoggedIn) {
 				setAuth(false)
 				isLoggedOut = true
 			}
