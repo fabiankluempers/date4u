@@ -46,7 +46,7 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-
+                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.2")
             }
         }
         val commonTest by getting {
@@ -55,6 +55,7 @@ kotlin {
             }
         }
         val springMain by getting {
+            dependsOn(commonMain)
             dependencies {
                 implementation("org.springframework.boot:spring-boot-starter-web")
                 implementation("org.springframework.boot:spring-boot-starter-security")
@@ -68,6 +69,7 @@ kotlin {
         }
         val springTest by getting
         val reactMain by getting {
+            dependsOn(commonMain)
             dependencies {
                 implementation("org.jetbrains.kotlin-wrappers:kotlin-react:17.0.2-pre.290-kotlin-1.6.10")
                 implementation("org.jetbrains.kotlin-wrappers:kotlin-react-dom:17.0.2-pre.290-kotlin-1.6.10")
