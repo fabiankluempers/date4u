@@ -38,7 +38,7 @@ data class Profile(
 
   companion object {
 	enum class Gender {
-	  Male, Female, Diverse;
+	  MALE, FEMALE, DIVERSE;
 	  companion object{
 		val asList = values().map(Gender::toString)
 	  }
