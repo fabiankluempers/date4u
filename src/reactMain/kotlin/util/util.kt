@@ -1,5 +1,6 @@
 package util
 
+import io.ktor.client.request.*
 import kotlinx.browser.document
 
 private val getCookies = {
@@ -10,5 +11,9 @@ private val getCookies = {
 
 object COOKIES {
 	operator fun get(key: String) = getCookies()[key]
+}
+
+fun HttpRequestBuilder.addXsrfToken() {
+	headers["X-XSRF-TOKEN"] = COOKIES["XSRF-TOKEN"] ?: error("Missing XSRF-TOKEN cookie")
 }
 

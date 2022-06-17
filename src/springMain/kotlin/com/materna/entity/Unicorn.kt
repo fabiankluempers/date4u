@@ -11,7 +11,7 @@ data class Unicorn(
 
     @OneToOne
     @JoinColumn(name = "profile_fk")
-    val profile: Profile? = null,
+    val profile: Profile,
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null,

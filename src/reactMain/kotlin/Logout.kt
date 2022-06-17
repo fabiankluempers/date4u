@@ -8,6 +8,7 @@ import react.dom.html.ReactHTML.div
 import react.dom.html.ReactHTML.strong
 import react.router.dom.NavLink
 import util.COOKIES
+import util.addXsrfToken
 
 private const val LOGOUT_URL = "/perform_logout"
 
@@ -19,7 +20,7 @@ val Logout = FC<Props> {
 		scope.launch {
 			val loginState : LoginState = client.post {
 				url(LOGOUT_URL)
-				headers { append("X-XSRF-TOKEN", COOKIES["XSRF-TOKEN"] ?: "") }
+				addXsrfToken()
 			}.body()
 			if (!loginState.isLoggedIn) {
 				setAuth(false)

@@ -15,88 +15,91 @@ import react.dom.html.ReactHTML.input
 import react.dom.html.ReactHTML.label
 import react.router.useNavigate
 import util.COOKIES
+import util.addXsrfToken
 
 private const val LOGIN_URL = "/perform_login"
 
 val Login = FC<Props> {
-	var username by useState("")
-	var password by useState("")
-	var err by useState("")
-	val auth = useContext(AuthContext)
-	val navigate = useNavigate()
+  var username by useState("")
+  var password by useState("")
+  var err by useState("")
+  val auth = useContext(AuthContext)
+  val navigate = useNavigate()
 
-	useEffect(username, password) { err = "" }
+  useEffect(username, password) { err = "" }
 
-	div {
-		className = "d-flex justify-content-center"
-		form {
-			className = "m-3"
-			onSubmit = {
-				it.preventDefault()
-			}
-			h1 {
-				className = "mb-3"
-				+"Sign In"
-			}
-			div {
-				className = "mb-3"
-				label {
-					className = "form-label"
-					htmlFor = "email"
-					+"Email Address"
-				}
-				input {
-					className = "form-control"
-					type = InputType.email
-					id = "email"
-					name = "email"
-					placeholder = "name@example"
-					onChange = { username = it.target.value }
-					value = username
-				}
-			}
-			div {
-				className = "mb-3"
-				label {
-					className = "form-label"
-					htmlFor = "password"
-					+"Password"
-				}
-				input {
-					className = "form-control"
-					type = InputType.password
-					id = "password"
-					name = "password"
-					onChange = { password = it.target.value }
-					value = password
-				}
-			}
-			if (err.isNotBlank()) {
-				+err
-			}
-			button {
-				className = "btn btn-outline-dark"
-				type = ButtonType.button
-				+"Submit"
-				onClick = {
-					scope.launch {
-						// TODO remove bodyAsText for useful type
-						val authState: LoginState = client.submitForm(
-							url = LOGIN_URL,
-							formParameters = Parameters.build {
-								append("username", username)
-								append("password", password)
-								append("_csrf", COOKIES["XSRF-TOKEN"] ?: "")
-							}).body()
-						if (authState.isLoggedIn) {
-							auth.setAuthenticated(true)
-							navigate("/")
-						} else {
-							err = "Wrong username or password."
-						}
-					}
-				}
-			}
-		}
-	}
+  div {
+    className = "d-flex justify-content-center"
+    form {
+      className = "m-3"
+      onSubmit = {
+        it.preventDefault()
+      }
+      h1 {
+        className = "mb-3"
+        +"Sign In"
+      }
+      div {
+        className = "mb-3"
+        label {
+          className = "form-label"
+          htmlFor = "email"
+          +"Email Address"
+        }
+        input {
+          className = "form-control"
+          type = InputType.email
+          id = "email"
+          name = "email"
+          placeholder = "name@example"
+          onChange = { username = it.target.value }
+          value = username
+        }
+      }
+      div {
+        className = "mb-3"
+        label {
+          className = "form-label"
+          htmlFor = "password"
+          +"Password"
+        }
+        input {
+          className = "form-control"
+          type = InputType.password
+          id = "password"
+          name = "password"
+          onChange = { password = it.target.value }
+          value = password
+        }
+      }
+      if (err.isNotBlank()) {
+        +err
+      }
+      button {
+        className = "btn btn-outline-dark"
+        type = ButtonType.button
+        +"Submit"
+        onClick = {
+          scope.launch {
+            // TODO remove bodyAsText for useful type
+            val authState: LoginState = client.submitForm(
+              url = LOGIN_URL,
+              formParameters = Parameters.build {
+                append("username", username)
+                append("password", password)
+              }
+            ) {
+              addXsrfToken()
+            }.body()
+          if (authState.isLoggedIn) {
+            auth.setAuthenticated(true)
+            navigate("/")
+          } else {
+            err = "Wrong username or password."
+          }
+        }
+      }
+    }
+  }
+}
 }

@@ -37,44 +37,48 @@ data class Profile(
 ) {
 
   companion object {
-	enum class Gender {
-	  MALE, FEMALE, DIVERSE;
-	  companion object{
-		val asList = values().map(Gender::toString)
-	  }
-	}
-	fun toConstraintsDTO(): ProfileConstraintsDTO = ProfileConstraintsDTO(
-	  minHornLength = validHornLength.first,
-	  maxHornLength = validHornLength.last,
-	  genders = Gender.asList
-	)
+    enum class Gender {
+      MALE,
+      FEMALE,
+      DIVERSE;
 
-	val validHornLength = (0..50)
+      companion object {
+        val asList = values().map(Gender::toString)
+      }
+    }
+
+    fun toConstraintsDTO(): ProfileConstraintsDTO = ProfileConstraintsDTO(
+      minHornLength = validHornLength.first,
+      maxHornLength = validHornLength.last,
+      genders = Gender.asList
+    )
+
+    val validHornLength = (0..50)
   }
 
-  fun toViewProfileDTO() = ProfileDTO(
-	nickname = nickname,
-	hornLength = hornLength.toInt(),
-	birthdate = birthdate.toKotlinLocalDate(),
-	gender = gender.toInt(),
-	attractedToGender = attractedToGender?.toInt(),
-	description = description,
-	lastSeen = lastSeen.toKotlinLocalDateTime(),
+  fun toProfileDTO() = ProfileDTO(
+    nickname = nickname,
+    hornLength = hornLength.toInt(),
+    birthdate = birthdate.toKotlinLocalDate(),
+    gender = gender.toInt(),
+    attractedToGender = attractedToGender?.toInt(),
+    description = description,
+    lastSeen = lastSeen.toKotlinLocalDateTime(),
   )
 
   override fun equals(other: Any?): Boolean {
-	if (this === other) return true
-	if (other == null || Hibernate.getClass(this) != Hibernate.getClass(other)) return false
-	other as Profile
+    if (this === other) return true
+    if (other == null || Hibernate.getClass(this) != Hibernate.getClass(other)) return false
+    other as Profile
 
-	return id != null && id == other.id
+    return id != null && id == other.id
   }
 
   override fun hashCode(): Int = javaClass.hashCode()
 
   @Override
   override fun toString(): String {
-	return this::class.simpleName + "(id = $id , birthdate = $birthdate , nickname = $nickname , hornLength = $hornLength , gender = $gender , attractedToGender = $attractedToGender , description = $description , lastSeen = $lastSeen , unicorn = ${unicorn.id} )"
+    return this::class.simpleName + "(id = $id , birthdate = $birthdate , nickname = $nickname , hornLength = $hornLength , gender = $gender , attractedToGender = $attractedToGender , description = $description , lastSeen = $lastSeen , unicorn = ${unicorn.id} )"
   }
 
 }
