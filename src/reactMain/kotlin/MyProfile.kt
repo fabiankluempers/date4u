@@ -16,7 +16,7 @@ import react.useState
 val MyProfile = FC<Props> {
   val (profile, setProfile) = useState<ProfileDTO?>(null)
   val (constraints, setConstraints) = useState<ProfileConstraintsDTO?>(null)
-  var err by useState<String?>(null)
+  val (err, setErr) = useState<String?>(null)
   val navigate = useNavigate()
   useEffectOnce {
 	scope.launch {
@@ -27,18 +27,20 @@ val MyProfile = FC<Props> {
 	}
   }
   if (profile != null && constraints != null) {
+	  println("rendering with $err")
 	Profile {
 	  viewMode = ViewMode.UPDATE
 	  profileView = profile
 	  profileConstraints = constraints
 	  errorMessage = err
+		setErrorMessage = setErr
 	  onSubmit = {
 		scope.launch {
 		  val response = saveProfile(it)
 		  if (response.status.value in 200..299) {
 			navigate("/my_profile")
 		  } else {
-			err = response.headers["error-message"] ?: "An unknown error occurred"
+			setErr(response.headers["error-message"] ?: "An unknown error occurred")
 		  }
 		}
 	  }
