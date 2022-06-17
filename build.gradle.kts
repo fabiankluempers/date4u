@@ -78,7 +78,6 @@ kotlin {
                 implementation("org.jetbrains.kotlin-wrappers:kotlin-react-css:17.0.2-pre.290-kotlin-1.6.10")
                 implementation("org.jetbrains.kotlin-wrappers:kotlin-react-router-dom:6.2.1-pre.290-kotlin-1.6.10")
                 implementation("io.ktor:ktor-client-js:2.0.2")
-                implementation("io.arrow-kt:arrow-core:1.1.3-alpha.16")
                 implementation("io.ktor:ktor-client-content-negotiation:2.0.2")
                 implementation(npm("react-bootstrap", "2.4.0"))
                 implementation("io.ktor:ktor-serialization-kotlinx-json:2.0.2")
