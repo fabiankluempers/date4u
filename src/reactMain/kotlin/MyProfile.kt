@@ -2,6 +2,7 @@ import component.profile.Profile
 import component.profile.ViewMode
 import dto.ProfileConstraintsDTO
 import dto.ProfileDTO
+import dto.ResponseDTO
 import io.ktor.client.call.*
 import io.ktor.client.request.*
 import io.ktor.http.*
@@ -28,7 +29,6 @@ val MyProfile = FC<Props> {
     }
   }
   if (profile != null && constraints != null) {
-    println("rendering with $err")
     Profile {
       viewMode = ViewMode.UPDATE
       profileView = profile
@@ -37,12 +37,9 @@ val MyProfile = FC<Props> {
       setErrorMessage = setErr
       onSubmit = {
         scope.launch {
-          val response = saveProfile(it)
-          if (response.status.value in 200..299) {
-            navigate("/my_profile")
-          } else {
-            setErr(response.headers["error-message"] ?: "An unknown error occurred")
-          }
+          val response : ResponseDTO = saveProfile(it).body()
+          if (response.isError()) setErr(response.getError().detail ?: "An unknown Error occurred")
+          else setProfile(response.get())
         }
       }
     }

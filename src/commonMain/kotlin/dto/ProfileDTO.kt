@@ -15,9 +15,3 @@ data class ProfileDTO(
   val lastSeen: LocalDateTime,
 )
 
-@Serializable
-data class ProfileConstraintsDTO(
-  val minHornLength: Int,
-  val maxHornLength: Int,
-  val genders: List<String>,
-)
