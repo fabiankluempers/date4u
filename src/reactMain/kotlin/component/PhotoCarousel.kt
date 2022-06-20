@@ -15,23 +15,22 @@ interface PhotoCarouselProps : Props {
 }
 
 val PhotoCarousel = FC<PhotoCarouselProps> { props ->
-  println(props.photos)
   div {
     id = "photoCarousel"
     className = "carousel slide"
     asDynamic()["data-bs-ride"] = "carousel"
     div {
       className = "carousel-inner"
-      props.photos?.map {
+      props.photos?.map { (nickname, name, isProfilePhoto) ->
         div {
           className = "carousel-item"
+          if(isProfilePhoto) className += " active"
           img {
-            src = "/photo/${it.name}.jpg"
+            src = "/photo/${name}.jpg"
             className = "d-block w-100"
-            alt = "A photo of ${it.nickname}."
-            if (it.isProfilePhoto) {
-              alt = "The profile photo of ${it.nickname}."
-              className += " active"
+            alt = "A photo of ${nickname}."
+            if (isProfilePhoto) {
+              alt = "The profile photo of ${nickname}."
             }
           }
         }

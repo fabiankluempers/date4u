@@ -42,7 +42,7 @@ external interface ProfileProps : Props {
     var onSubmit: (ProfileDTO) -> Unit
 }
 
-private suspend fun fetchPhoto(nickname : String) = client
+private suspend fun fetchPhoto(nickname: String) = client
     .get("/profile/$nickname/photos")
     .body<List<PhotoDTO>>()
 
@@ -86,8 +86,10 @@ val Profile = FC<ProfileProps> { props ->
             className = "row"
             div {
                 className = "col-md-4"
-                PhotoCarousel {
-                    this.photos = photos
+                photos?.let {
+                    PhotoCarousel {
+                        this.photos = it
+                    }
                 }
                 div {
                     className = "mb-3"
