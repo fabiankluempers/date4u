@@ -1,5 +1,8 @@
 package com.materna.entity
 
+import dto.PhotoDTO
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.toKotlinLocalDateTime
 import org.hibernate.Hibernate
 import java.time.LocalDateTime
 import javax.persistence.Entity
@@ -31,6 +34,13 @@ data class Photo(
 
         return id != null && id == other.id
     }
+
+    fun toPhotoDTO() = PhotoDTO(
+        nickname = profile.nickname,
+        name = name,
+        isProfilePhoto = isProfilePhoto,
+        created = created.toKotlinLocalDateTime()
+    )
 
     override fun hashCode(): Int = javaClass.hashCode()
 

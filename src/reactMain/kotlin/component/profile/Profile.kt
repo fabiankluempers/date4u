@@ -1,5 +1,7 @@
 package component.profile
 
+import client
+import component.PhotoCarousel
 import dto.ProfileDTO
 import react.dom.html.InputType
 import react.dom.html.ReactHTML.div
@@ -7,14 +9,23 @@ import react.dom.html.ReactHTML.h1
 import react.dom.html.ReactHTML.input
 import react.dom.html.ReactHTML.label
 import component.profile.ViewMode.*
+import dto.PhotoDTO
 import dto.ProfileConstraintsDTO
+import io.ktor.client.call.*
+import io.ktor.client.request.*
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDate
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonArray
+import kotlinx.serialization.json.decodeFromJsonElement
 import react.*
 import react.dom.html.ReactHTML.button
 import react.dom.html.ReactHTML.option
 import react.dom.html.ReactHTML.select
 import react.dom.html.ReactHTML.span
 import react.dom.html.ReactHTML.strong
+import scope
 
 enum class ViewMode {
     CREATE,
@@ -31,12 +42,23 @@ external interface ProfileProps : Props {
     var onSubmit: (ProfileDTO) -> Unit
 }
 
+private suspend fun fetchPhoto(nickname : String) = client
+    .get("/profile/$nickname/photos")
+    .body<List<PhotoDTO>>()
+
 val Profile = FC<ProfileProps> { props ->
     var profile by useState(props.profileView)
     val constraints = props.profileConstraints
+    var photos by useState<List<PhotoDTO>?>(null)
 
     useEffect(profile) {
         props.setErrorMessage(null)
+    }
+
+    useEffectOnce {
+        scope.launch {
+            photos = fetchPhoto(profile.nickname)
+        }
     }
 
     val isReadOnly = when (props.viewMode) {
@@ -64,7 +86,9 @@ val Profile = FC<ProfileProps> { props ->
             className = "row"
             div {
                 className = "col-md-4"
-                //TODO Photos here
+                PhotoCarousel {
+                    this.photos = photos
+                }
                 div {
                     className = "mb-3"
                     label {

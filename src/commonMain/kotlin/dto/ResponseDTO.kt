@@ -12,8 +12,8 @@ data class ResponseDTO private constructor(private val success: ProfileDTO?, pri
   fun isSuccess() = success != null
 
   companion object {
-	fun <T> success(success: ProfileDTO) = ResponseDTO(success, null)
+	fun success(success: ProfileDTO) = ResponseDTO(success, null)
 
-	fun <T> failure(error: ErrorDTO) = ResponseDTO(null, error)
+	fun failure(error: ErrorDTO) = ResponseDTO(null, error)
   }
 }
