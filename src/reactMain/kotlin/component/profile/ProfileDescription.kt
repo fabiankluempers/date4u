@@ -14,6 +14,7 @@ interface ProfileDescriptionProps : Props {
 
 val ProfileDescription = FC<ProfileDescriptionProps> { props ->
   div {
+	className = "mb-3"
 	label {
 	  className = "form-label"
 	  htmlFor = "description"

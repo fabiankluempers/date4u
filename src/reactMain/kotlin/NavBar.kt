@@ -16,7 +16,7 @@ val NavBar = FC<Props> {
     val auth = useContext(AuthContext)
 
     nav {
-        className = "navbar navbar-expand-lg bg-light"
+        className = "navbar navbar-dark navbar-expand-lg bg-dark"
         div {
             className = "container-fluid"
             NavLink {
@@ -40,15 +40,15 @@ val NavBar = FC<Props> {
                 id = "navbarSupportedContent"
                 ul {
                     className = "navbar-nav me-auto mb-2 mb-lg-0"
-                    SimpleNavItem {
-                        label = "My Profile"
-                        to = "/my_profile"
-                    }
-                    SimpleNavItem {
-                        label = "Recommended Unicorns"
-                        to = "/recommended_profiles"
-                    }
                     if (auth.isAuthenticated) {
+                        SimpleNavItem {
+                            label = "My Profile"
+                            to = "/my_profile"
+                        }
+                        SimpleNavItem {
+                            label = "Search"
+                            to = "/search_profiles"
+                        }
                         SimpleNavItem {
                             label = "Logout"
                             to = "/logout"

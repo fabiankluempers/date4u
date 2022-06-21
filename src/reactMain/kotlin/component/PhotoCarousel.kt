@@ -1,8 +1,11 @@
 package component
 
+import csstype.Width
+import csstype.*
 import dto.PhotoDTO
 import react.FC
 import react.Props
+import react.css.css
 import react.dom.aria.ariaHidden
 import react.dom.html.ButtonType
 import react.dom.html.ReactHTML.button
@@ -17,7 +20,7 @@ interface PhotoCarouselProps : Props {
 val PhotoCarousel = FC<PhotoCarouselProps> { props ->
   div {
     id = "photoCarousel"
-    className = "carousel slide"
+    className = "carousel slide mb-3"
     asDynamic()["data-bs-ride"] = "carousel"
     div {
       className = "carousel-inner"
@@ -27,14 +30,24 @@ val PhotoCarousel = FC<PhotoCarouselProps> { props ->
           if(isProfilePhoto) className += " active"
           img {
             src = "/photo/${name}.jpg"
-            className = "d-block w-100"
+            className = "d-block w-100 rounded"
             alt = "A photo of ${nickname}."
             if (isProfilePhoto) {
               alt = "The profile photo of ${nickname}."
             }
           }
         }
-      } ?: LoadingSpinner()
+      } ?: div {
+        className = "carousel-item active"
+        div {
+          className = "d-flex justify-content-center"
+          div {
+            className = "mx-3"
+            + "Loading Photos..."
+          }
+          LoadingSpinner()
+        }
+      }
     }
     button {
       className = "carousel-control-prev"

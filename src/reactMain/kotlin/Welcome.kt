@@ -1,3 +1,4 @@
+import component.search.FilterBar
 import csstype.px
 import csstype.rgb
 import react.FC
@@ -34,4 +35,5 @@ val Welcome = FC<WelcomeProps> { props ->
             name = event.target.value
         }
     }
+    FilterBar()
 }

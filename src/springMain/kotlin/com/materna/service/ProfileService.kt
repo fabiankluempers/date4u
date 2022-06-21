@@ -21,6 +21,8 @@ class ProfileService(
 	?.profile
 	?.toProfileDTO()
 
+  fun all() = profileRepository.findAll().toList()
+
 
   context(UnicornDetails) @Transactional
   fun updateProfile(profileDTO: ProfileDTO): Result<ProfileDTO> = runCatching {

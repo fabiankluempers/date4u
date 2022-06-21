@@ -30,76 +30,82 @@ val Login = FC<Props> {
 
   div {
     className = "d-flex justify-content-center"
-    form {
-      className = "m-3"
-      onSubmit = {
-        it.preventDefault()
-      }
-      h1 {
-        className = "mb-3"
-        +"Sign In"
-      }
+    div {
+      className = "card m-3"
       div {
-        className = "mb-3"
-        label {
-          className = "form-label"
-          htmlFor = "email"
-          +"Email Address"
+        className = "card-body"
+        h1 {
+          className = "card-title"
+          +"Sign In"
         }
-        input {
-          className = "form-control"
-          type = InputType.email
-          id = "email"
-          name = "email"
-          placeholder = "name@example"
-          onChange = { username = it.target.value }
-          value = username
-        }
-      }
-      div {
-        className = "mb-3"
-        label {
-          className = "form-label"
-          htmlFor = "password"
-          +"Password"
-        }
-        input {
-          className = "form-control"
-          type = InputType.password
-          id = "password"
-          name = "password"
-          onChange = { password = it.target.value }
-          value = password
-        }
-      }
-      if (err.isNotBlank()) {
-        +err
-      }
-      button {
-        className = "btn btn-outline-dark"
-        type = ButtonType.button
-        +"Submit"
-        onClick = {
-          scope.launch {
-            // TODO remove bodyAsText for useful type
-            val authState: LoginState = client.submitForm(
-              url = LOGIN_URL,
-              formParameters = Parameters.build {
-                append("username", username)
-                append("password", password)
+        form {
+          className = "m-3"
+          onSubmit = {
+            it.preventDefault()
+          }
+          div {
+            className = "mb-3"
+            label {
+              className = "form-label"
+              htmlFor = "email"
+              +"Email Address"
+            }
+            input {
+              className = "form-control"
+              type = InputType.email
+              id = "email"
+              name = "email"
+              placeholder = "name@example"
+              onChange = { username = it.target.value }
+              value = username
+            }
+          }
+          div {
+            className = "mb-3"
+            label {
+              className = "form-label"
+              htmlFor = "password"
+              +"Password"
+            }
+            input {
+              className = "form-control"
+              type = InputType.password
+              id = "password"
+              name = "password"
+              onChange = { password = it.target.value }
+              value = password
+            }
+          }
+          if (err.isNotBlank()) {
+            +err
+          }
+          button {
+            className = "btn btn-outline-light float-end"
+            type = ButtonType.button
+            +"Submit"
+            onClick = {
+              scope.launch {
+                // TODO remove bodyAsText for useful type
+                val authState: LoginState = client.submitForm(
+                  url = LOGIN_URL,
+                  formParameters = Parameters.build {
+                    append("username", username)
+                    append("password", password)
+                  }
+                ) {
+                  addXsrfToken()
+                }.body()
+                if (authState.isLoggedIn) {
+                  auth.setAuthenticated(true)
+                  navigate("/")
+                } else {
+                  err = "Wrong username or password."
+                }
               }
-            ) {
-              addXsrfToken()
-            }.body()
-          if (authState.isLoggedIn) {
-            auth.setAuthenticated(true)
-            navigate("/")
-          } else {
-            err = "Wrong username or password."
+            }
           }
         }
       }
     }
-  }
 }
 }

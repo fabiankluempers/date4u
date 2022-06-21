@@ -43,6 +43,9 @@ class ProfileController(private val profileService: ProfileService) {
   @GetMapping("/profile/constraints")
   fun constraints() = Profile.toConstraintsDTO()
 
+  @GetMapping("/profile/all")
+  fun profiles() = profileService.all().map(Profile::toProfileDTO)
+
 
   private val Authentication.unicornDetails
 	get() = principal as UnicornDetails

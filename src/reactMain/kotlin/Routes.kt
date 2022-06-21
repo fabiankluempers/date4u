@@ -1,3 +1,4 @@
+import component.search.Search
 import react.FC
 import react.Props
 import react.create
@@ -24,6 +25,10 @@ val MyRoutes = FC<Props> {
         Route {
             path = "/my_profile"
             element = createElement(MyProfile)
+        }
+        Route {
+            path = "/search_profiles"
+            element = createElement(Search)
         }
     }
 }

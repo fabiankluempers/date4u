@@ -13,4 +13,10 @@ class PhotoController(private val photoRepository: PhotoRepository) {
   fun photosByProfile(@PathVariable nickname: String) = photoRepository
 	  .findByProfileNickname(nickname)
 	  .map(Photo::toPhotoDTO)
+
+  @GetMapping("/profile/{nickname}/profile_photo")
+  fun profilePhotoByNickname(@PathVariable nickname: String) = photoRepository
+	.findProfilePhotoByNickname(nickname)
+	.firstOrNull()
+	?.toPhotoDTO()
 }
