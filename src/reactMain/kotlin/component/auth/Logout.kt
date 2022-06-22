@@ -1,3 +1,7 @@
+package component.auth
+
+import component.app.client
+import component.app.scope
 import context.AuthContext
 import dto.LoginState
 import io.ktor.client.call.*
@@ -7,7 +11,6 @@ import react.*
 import react.dom.html.ReactHTML.div
 import react.dom.html.ReactHTML.strong
 import react.router.dom.NavLink
-import util.COOKIES
 import util.addXsrfToken
 
 private const val LOGOUT_URL = "/perform_logout"

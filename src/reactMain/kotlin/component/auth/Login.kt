@@ -1,3 +1,7 @@
+package component.auth
+
+import component.app.client
+import component.app.scope
 import context.AuthContext
 import dto.LoginState
 import io.ktor.client.call.*
@@ -14,7 +18,6 @@ import react.dom.html.ReactHTML.h1
 import react.dom.html.ReactHTML.input
 import react.dom.html.ReactHTML.label
 import react.router.useNavigate
-import util.COOKIES
 import util.addXsrfToken
 
 private const val LOGIN_URL = "/perform_login"

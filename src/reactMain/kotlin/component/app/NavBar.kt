@@ -1,3 +1,5 @@
+package component.app
+
 import context.AuthContext
 import react.*
 import react.dom.aria.ariaControls
@@ -50,12 +52,12 @@ val NavBar = FC<Props> {
                             to = "/search_profiles"
                         }
                         SimpleNavItem {
-                            label = "Logout"
+                            label = "component.auth.getLogout"
                             to = "/logout"
                         }
                     } else {
                         SimpleNavItem {
-                            label = "Login"
+                            label = "component.auth.getLogin"
                             to = "/login"
                         }
                     }

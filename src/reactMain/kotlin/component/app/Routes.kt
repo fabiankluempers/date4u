@@ -1,3 +1,9 @@
+package component.app
+
+import component.auth.Login
+import component.auth.Logout
+import Welcome
+import component.profile.MyProfile
 import component.search.Search
 import react.FC
 import react.Props

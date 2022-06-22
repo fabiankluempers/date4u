@@ -1,11 +1,9 @@
-package component
+package component.profile
 
-import csstype.Width
-import csstype.*
+import component.generic.LoadingSpinner
 import dto.PhotoDTO
 import react.FC
 import react.Props
-import react.css.css
 import react.dom.aria.ariaHidden
 import react.dom.html.ButtonType
 import react.dom.html.ReactHTML.button

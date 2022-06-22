@@ -1,7 +1,7 @@
 package component.profile
 
-import client
-import component.PhotoCarousel
+import component.app.client
+import component.app.scope
 import dto.ProfileDTO
 import react.dom.html.InputType
 import react.dom.html.ReactHTML.div
@@ -13,19 +13,13 @@ import dto.PhotoDTO
 import dto.ProfileConstraintsDTO
 import io.ktor.client.call.*
 import io.ktor.client.request.*
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDate
-import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.JsonArray
-import kotlinx.serialization.json.decodeFromJsonElement
 import react.*
 import react.dom.html.ReactHTML.button
 import react.dom.html.ReactHTML.option
 import react.dom.html.ReactHTML.select
-import react.dom.html.ReactHTML.span
 import react.dom.html.ReactHTML.strong
-import scope
 
 enum class ViewMode {
   CREATE,

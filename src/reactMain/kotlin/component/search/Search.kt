@@ -1,6 +1,7 @@
 package component.search
 
-import client
+import component.app.client
+import component.app.scope
 import dto.ProfileDTO
 import io.ktor.client.call.*
 import io.ktor.client.request.*
@@ -8,10 +9,8 @@ import kotlinx.coroutines.launch
 import react.FC
 import react.Props
 import react.dom.html.ReactHTML.div
-import react.dom.html.ReactHTML.ul
 import react.useEffectOnce
 import react.useState
-import scope
 
 val Search = FC<Props> {
   var profiles by useState<List<ProfileDTO>>(listOf())

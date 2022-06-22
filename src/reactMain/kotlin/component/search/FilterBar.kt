@@ -1,6 +1,6 @@
 package component.search
 
-import component.Checkbox
+import component.generic.Checkbox
 import csstype.rem
 import react.FC
 import react.Props
@@ -57,7 +57,7 @@ val FilterBar = FC<Props> {
           id = gender + "Checkbox"
           onChange = { checked ->
             println(checked)
-            if (checked) interestedIn += index else interestedIn -= index
+            interestedIn = if (checked) interestedIn + index else interestedIn - index
           }
         }
       }

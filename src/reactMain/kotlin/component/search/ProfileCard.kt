@@ -1,8 +1,8 @@
 package component.search
 
-import client
-import component.LoadingSpinner
-import csstype.Resize
+import component.app.client
+import component.app.scope
+import component.generic.LoadingSpinner
 import csstype.rem
 import dto.PhotoDTO
 import dto.ProfileDTO
@@ -16,10 +16,8 @@ import react.dom.html.ReactHTML.div
 import react.dom.html.ReactHTML.h5
 import react.dom.html.ReactHTML.img
 import react.dom.html.ReactHTML.p
-import react.dom.html.ReactHTML.textarea
 import react.useEffectOnce
 import react.useState
-import scope
 
 interface ProfileCardProps : Props {
   var profile: ProfileDTO

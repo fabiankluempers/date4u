@@ -1,3 +1,5 @@
+package component.app
+
 import context.AuthContext
 import context.AuthState
 import io.ktor.client.*

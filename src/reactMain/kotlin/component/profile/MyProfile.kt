@@ -1,5 +1,7 @@
-import component.profile.Profile
-import component.profile.ViewMode
+package component.profile
+
+import component.app.client
+import component.app.scope
 import dto.ProfileConstraintsDTO
 import dto.ProfileDTO
 import dto.ResponseDTO

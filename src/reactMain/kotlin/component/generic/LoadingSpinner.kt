@@ -1,8 +1,7 @@
-package component
+package component.generic
 
 import react.FC
 import react.Props
-import react.dom.aria.AriaRole
 import react.dom.html.ReactHTML.div
 import react.dom.html.ReactHTML.span
 
