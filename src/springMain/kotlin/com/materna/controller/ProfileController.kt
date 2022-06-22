@@ -38,13 +38,26 @@ class ProfileController(private val profileService: ProfileService) {
 		  else                         -> ErrorDTO(error = "Internal server error")
 		}
 	  )
-	}.also { println(it) }
+	}
 
   @GetMapping("/profile/constraints")
   fun constraints() = Profile.toConstraintsDTO()
 
   @GetMapping("/profile/all")
   fun profiles() = profileService.all().map(Profile::toProfileDTO)
+
+  @GetMapping("/profile/search")
+  fun search(
+	@RequestParam minAge: Int,
+	@RequestParam maxAge: Int,
+	@RequestParam minHornLength: Int,
+	@RequestParam maxHornLength: Int,
+	@RequestParam interestedIn: List<Short>,
+  ) = profileService.search(
+	ageRange = minAge..maxAge,
+	hornLengthRange = minHornLength..maxHornLength,
+	interestedIn = interestedIn.toSet()
+  ).map(Profile::toProfileDTO)
 
 
   private val Authentication.unicornDetails

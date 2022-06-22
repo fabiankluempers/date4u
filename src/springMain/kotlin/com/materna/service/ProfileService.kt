@@ -41,7 +41,6 @@ class ProfileService(
 	  profileDTO.nickname != unicorn.profile.nickname &&
 	  profileRepository.existsByNickname(profileDTO.nickname)
 	) {
-	  println("tuherjsbfgdkjgdfj,gjdfk")
 	  throw UniqueConstraintException.of(Profile::nickname)
 	}
 
@@ -56,6 +55,25 @@ class ProfileService(
 	profileRepository.save(profile)
 
 	profile.toProfileDTO()
+  }
+
+  fun search(ageRange: IntRange, hornLengthRange: IntRange, interestedIn: Set<Short>): List<Profile> {
+	val (firstBirthdate, lastBirthdate) = ageRange.toDates()
+	return profileRepository.findByFilter(
+	  lowerDate = firstBirthdate,
+	  upperDate = lastBirthdate,
+	  lowerHornLength = hornLengthRange.first.toShort(),
+	  upperHornLength = hornLengthRange.last.toShort(),
+	  interestedIn = interestedIn
+	)
+  }
+
+  private fun IntRange.toDates(): Pair<LocalDate, LocalDate> {
+	val now = LocalDate.now()
+	return Pair(
+	  now.minusYears(last.toLong()),
+	  now.minusYears(first.toLong())
+	)
   }
 
   context(UnicornDetails)

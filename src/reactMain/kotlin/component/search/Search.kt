@@ -40,7 +40,15 @@ val Search = FC<Props> {
         onSearch = {
           scope.launch {
             val profileJob = async {
-              client.get("/profile/all").body<List<ProfileDTO>>()
+              client.get("/profile/search"){
+                parameter("minAge", it.ageRange.first)
+                parameter("maxAge", it.ageRange.last)
+                parameter("minHornLength", it.hornLengthRange.first)
+                parameter("maxHornLength", it.hornLengthRange.last)
+                it.interestedIn.forEach { gender ->
+                  parameter("interestedIn", gender)
+                }
+              }.body<List<ProfileDTO>>()
             }
             profiles = profileJob.await()
           }

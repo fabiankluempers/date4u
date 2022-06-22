@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.ResponseBody
 @Controller
 class LoginController {
 
-	@GetMapping("/login/status")
-	@ResponseBody
-	fun isLogin(authentication: Authentication?) = LoginState(authentication?.let { true } ?: false)
+  @GetMapping("/login/status")
+  @ResponseBody
+  fun isLogin(authentication: Authentication?) = LoginState(authentication != null)
 }
