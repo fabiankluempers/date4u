@@ -24,7 +24,7 @@ val NavBar = FC<Props> {
             NavLink {
                 className = "navbar-brand"
                 to = "/"
-                +"Navbar"
+                +"Date4U-nicorns"
             }
             button {
                 className = "navbar-toggler"
