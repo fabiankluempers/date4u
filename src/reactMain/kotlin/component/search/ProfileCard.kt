@@ -28,38 +28,38 @@ interface ProfileCardProps : Props {
 val ProfileCard = FC<ProfileCardProps> { props ->
   var profilePic by useState<PhotoDTO?>(null)
   useEffectOnce {
-	scope.launch {
-	  profilePic = client
-		.get("profile/${props.profile.nickname}/profile_photo")
-		.body<PhotoDTO?>()
-	}
+    scope.launch {
+      profilePic = client
+        .get("profile/${props.profile.nickname}/profile_photo")
+        .body<PhotoDTO?>()
+    }
   }
   div {
-	css { width = 18.rem }
-	className += " card m-3"
-	if (profilePic != null) {
-	  img {
-		src = "photo/${profilePic!!.name}.jpg"
-		className = "card-img-top"
-		alt = "Profile photo of ${props.profile.nickname}."
-	  }
-	} else {
-	  LoadingSpinner()
-	}
-	div {
-	  className = "card-body"
-	  h5 {
-		className = "card-title"
-		+props.profile.nickname
-	  }
-	  p {
-		className = "card-text"
-		+ "Birthdate: ${props.profile.birthdate}"
-	  }
-	  p {
-		className = "card-text"
-		+ "Hornlength: ${props.profile.hornLength}"
-	  }
-	}
+    css { width = 18.rem }
+    className += " card"
+    if (profilePic != null) {
+      img {
+        src = "photo/${profilePic!!.name}.jpg"
+        className = "card-img-top"
+        alt = "Profile photo of ${props.profile.nickname}."
+      }
+    } else {
+      LoadingSpinner()
+    }
+    div {
+      className = "card-body"
+      h5 {
+        className = "card-title"
+        +props.profile.nickname
+      }
+      p {
+        className = "card-text"
+        +"Birthdate: ${props.profile.birthdate}"
+      }
+      p {
+        className = "card-text"
+        +"Hornlength: ${props.profile.hornLength}"
+      }
+    }
   }
 }

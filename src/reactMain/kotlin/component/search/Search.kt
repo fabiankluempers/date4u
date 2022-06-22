@@ -17,24 +17,24 @@ val Search = FC<Props> {
   var profiles by useState<List<ProfileDTO>>(listOf())
 
   useEffectOnce {
-	scope.launch {
-	  profiles = client.get("/profile/all").body()
-	}
+    scope.launch {
+      profiles = client.get("/profile/all").body()
+    }
   }
 
   div {
-	className = "container justify-content-center"
-	FilterBar()
-	div {
-	  className = "row"
-	  profiles.map {
-		div {
-		  className = "col"
-		  ProfileCard {
-			profile = it
-		  }
-		}
-	  }
-	}
+    className = "container justify-content-center"
+    FilterBar()
+    div {
+      className = "row"
+      profiles.map {
+        div {
+          className = "col mb-3"
+          ProfileCard {
+            profile = it
+          }
+        }
+      }
+    }
   }
 }

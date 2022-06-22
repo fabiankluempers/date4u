@@ -26,43 +26,42 @@ val Range = FC<RangeProps> { props ->
   val maxId = "${props.id}Max"
 
   useEffect(range) {
-	props.onChange(range.first, range.last)
+    props.onChange(range.first, range.last)
   }
 
   div {
-	css { width = 18.rem }
-	className += " m-3"
-	label {
-	  className = "form-label"
-	  htmlFor = minId
-	  +"${props.minLabel}: ${range.first}"
-	}
-	ReactHTML.input {
-	  id = minId
-	  type = InputType.range
-	  className = "form-range"
-	  min = props.min.toDouble()
-	  max = props.max.toDouble()
-	  defaultValue = "${props.min}"
-	  onInput = {
-		range = it.currentTarget.valueAsNumber.toInt()..range.last
-	  }
-	}
-	label {
-	  className = "form-label"
-	  htmlFor = minId
-	  +"${props.maxLabel}: ${range.last}"
-	}
-	ReactHTML.input {
-	  id = maxId
-	  type = InputType.range
-	  className = "form-range"
-	  min = props.min.toDouble()
-	  max = props.max.toDouble()
-	  defaultValue = "${props.max}"
-	  onInput = {
-		range = range.first..it.currentTarget.valueAsNumber.toInt()
-	  }
-	}
+    css { width = 18.rem }
+    label {
+      className = "form-label"
+      htmlFor = minId
+      +"${props.minLabel}: ${range.first}"
+    }
+    ReactHTML.input {
+      id = minId
+      type = InputType.range
+      className = "form-range"
+      min = props.min.toDouble()
+      max = props.max.toDouble()
+      defaultValue = "${props.min}"
+      onInput = {
+        range = it.currentTarget.valueAsNumber.toInt()..range.last
+      }
+    }
+    label {
+      className = "form-label"
+      htmlFor = minId
+      +"${props.maxLabel}: ${range.last}"
+    }
+    ReactHTML.input {
+      id = maxId
+      type = InputType.range
+      className = "form-range"
+      min = props.min.toDouble()
+      max = props.max.toDouble()
+      defaultValue = "${props.max}"
+      onInput = {
+        range = range.first..it.currentTarget.valueAsNumber.toInt()
+      }
+    }
   }
 }
