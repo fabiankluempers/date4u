@@ -7,6 +7,8 @@ import com.materna.repository.UnicornRepository
 import com.materna.security.UnicornDetails
 import dto.ProfileDTO
 import org.springframework.stereotype.Service
+import java.time.LocalDate
+import java.time.Period
 import javax.transaction.Transactional
 
 @Service
@@ -22,6 +24,11 @@ class ProfileService(
 	?.toProfileDTO()
 
   fun all() = profileRepository.findAll().toList()
+
+  fun ageRange() = with(profileRepository) {
+	val now = LocalDate.now()
+	Period.between(lastBirthdate(), now).years..Period.between(firstBirthdate(), now).years
+  }
 
 
   context(UnicornDetails) @Transactional

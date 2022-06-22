@@ -16,7 +16,7 @@ interface RangeProps : Props {
   var minLabel: String
   var max: Int
   var maxLabel: String
-  var onChange: (Int, Int) -> Unit
+  var onChange: (IntRange) -> Unit
 }
 
 val Range = FC<RangeProps> { props ->
@@ -26,7 +26,7 @@ val Range = FC<RangeProps> { props ->
   val maxId = "${props.id}Max"
 
   useEffect(range) {
-    props.onChange(range.first, range.last)
+    props.onChange(range)
   }
 
   div {

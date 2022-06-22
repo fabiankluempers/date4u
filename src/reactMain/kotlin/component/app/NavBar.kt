@@ -52,12 +52,12 @@ val NavBar = FC<Props> {
                             to = "/search_profiles"
                         }
                         SimpleNavItem {
-                            label = "component.auth.getLogout"
+                            label = "Logout"
                             to = "/logout"
                         }
                     } else {
                         SimpleNavItem {
-                            label = "component.auth.getLogin"
+                            label = "Login"
                             to = "/login"
                         }
                     }

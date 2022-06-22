@@ -35,5 +35,5 @@ val Welcome = FC<WelcomeProps> { props ->
             name = event.target.value
         }
     }
-    FilterBar()
+    //FilterBar()
 }
