@@ -12,21 +12,16 @@ import react.useEffect
 import react.useState
 
 interface FilterBarProps : Props {
+	var genders: List<String>
   var filter: ProfileFilter
   var onSearch: (ProfileFilter) -> Unit
 }
-
-data class ProfileFilter(val ageRange: IntRange, val hornLengthRange: IntRange, val interestedIn: Set<Int>)
 
 val FilterBar = FC<FilterBarProps> {props ->
   val colClass = "col m-3"
   var interestedIn by useState(props.filter.interestedIn)
   var ageRange by useState(props.filter.ageRange)
   var hornLengthRange by useState(props.filter.hornLengthRange)
-
-  useEffect(interestedIn) {
-	println(interestedIn)
-  }
 
   div {
 	className = "row align-items-center"
@@ -59,7 +54,7 @@ val FilterBar = FC<FilterBarProps> {props ->
 		className = "mb-1"
 		+"Interested in:"
 	  }
-	  listOf("Male", "Female", "Diverse").mapIndexed { index, gender ->
+	  props.genders.mapIndexed { index, gender ->
 		Checkbox {
 		  defaultChecked = false
 		  label = gender

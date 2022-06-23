@@ -2,7 +2,6 @@ package component.profile
 
 import component.app.client
 import component.app.scope
-import dto.ProfileConstraintsDTO
 import dto.ProfileDTO
 import dto.ResponseDTO
 import io.ktor.client.call.*
@@ -15,52 +14,39 @@ import react.Props
 import react.router.useNavigate
 import react.useEffectOnce
 import react.useState
-import util.addXsrfToken
+import util.*
 
 val MyProfile = FC<Props> {
-  val (profile, setProfile) = useState<ProfileDTO?>(null)
-  val (constraints, setConstraints) = useState<ProfileConstraintsDTO?>(null)
+  var profile by useState<ProfileDTO?>(null)
+  var constraints by useState<ProfileConstraints?>(null)
   val (err, setErr) = useState<String?>(null)
-  val navigate = useNavigate()
+
   useEffectOnce {
     scope.launch {
-      val profileJob = async { fetchMyProfile() }
-      val constraintJob = async { fetchProfileConstraints() }
-      setProfile(profileJob.await())
-      setConstraints(constraintJob.await())
+      val profileJob = async { client.fetchMyProfile() }
+      val ageRangeJob = async { client.fetchAgeRange() }
+      val genderJob = async { client.fetchGenders() }
+      profile = profileJob.await()
+      constraints = ProfileConstraints(ageRangeJob.await(), genderJob.await())
     }
   }
   if (profile != null && constraints != null) {
     Profile {
       viewMode = ViewMode.UPDATE
-      profileView = profile
-      profileConstraints = constraints
+      profileView = profile!!
+      profileConstraints = constraints!!
       errorMessage = err
       setErrorMessage = setErr
       onSubmit = {
         scope.launch {
-          val response : ResponseDTO = saveProfile(it).body()
+          val response: ResponseDTO = client.saveProfile(it).body()
           if (response.isError()) setErr(response.getError().detail ?: "An unknown Error occurred")
-          else setProfile(response.get())
+          else profile = response.get()
         }
       }
     }
   }
 }
 
-suspend fun saveProfile(profileDTO: ProfileDTO) = client
-  .put("/profile") {
-    addXsrfToken()
-    contentType(ContentType.Application.Json)
-    setBody(profileDTO)
-  }
-
-val fetchProfileConstraints = suspend {
-  client.get("/profile/constraints").body<ProfileConstraintsDTO>()
-}
-
-val fetchMyProfile = suspend {
-  client.get("/profile").body<ProfileDTO>()
-}
 
 

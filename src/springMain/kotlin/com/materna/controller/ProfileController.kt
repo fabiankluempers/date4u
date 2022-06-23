@@ -21,45 +21,42 @@ class ProfileController(private val profileService: ProfileService) {
 
   @GetMapping("/profile")
   fun myProfile(authentication: Authentication) =
-	with(authentication.unicornDetails) {
-	  profileService.profileByEmail()
-	}
+    with(authentication.unicornDetails) {
+      profileService.profileByEmail()
+    }
 
   @PutMapping("/profile")
   fun updateMyProfile(authentication: Authentication, @RequestBody profile: ProfileDTO) =
-	with(authentication.unicornDetails) {
-	  profileService.updateProfile(profile)
-	}.map {
-	  ResponseDTO.success(it)
-	}.getOrElse {
-	  ResponseDTO.failure(
-		when (it) {
-		  is UniqueConstraintException -> it.toErrorDTO()
-		  else                         -> ErrorDTO(error = "Internal server error")
-		}
-	  )
-	}
-
-  @GetMapping("/profile/constraints")
-  fun constraints() = Profile.toConstraintsDTO()
+    with(authentication.unicornDetails) {
+      profileService.updateProfile(profile)
+    }.map {
+      ResponseDTO.success(it)
+    }.getOrElse {
+      ResponseDTO.failure(
+        when (it) {
+          is UniqueConstraintException -> it.toErrorDTO()
+          else -> ErrorDTO(error = "Internal server error")
+        }
+      )
+    }
 
   @GetMapping("/profile/all")
   fun profiles() = profileService.all().map(Profile::toProfileDTO)
 
   @GetMapping("/profile/search")
   fun search(
-	@RequestParam minAge: Int,
-	@RequestParam maxAge: Int,
-	@RequestParam minHornLength: Int,
-	@RequestParam maxHornLength: Int,
-	@RequestParam interestedIn: List<Short>,
+    @RequestParam minAge: Int,
+    @RequestParam maxAge: Int,
+    @RequestParam minHornLength: Int,
+    @RequestParam maxHornLength: Int,
+    @RequestParam interestedIn: List<Short>?,
   ) = profileService.search(
-	ageRange = minAge..maxAge,
-	hornLengthRange = minHornLength..maxHornLength,
-	interestedIn = interestedIn.toSet()
+    ageRange = minAge..maxAge,
+    hornLengthRange = minHornLength..maxHornLength,
+    interestedIn = interestedIn?.toSet() ?: setOf()
   ).map(Profile::toProfileDTO)
 
 
   private val Authentication.unicornDetails
-	get() = principal as UnicornDetails
+    get() = principal as UnicornDetails
 }

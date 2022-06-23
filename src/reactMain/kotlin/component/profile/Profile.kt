@@ -10,7 +10,6 @@ import react.dom.html.ReactHTML.input
 import react.dom.html.ReactHTML.label
 import component.profile.ViewMode.*
 import dto.PhotoDTO
-import dto.ProfileConstraintsDTO
 import io.ktor.client.call.*
 import io.ktor.client.request.*
 import kotlinx.coroutines.launch
@@ -27,12 +26,14 @@ enum class ViewMode {
   IMMUTABLE
 }
 
+data class ProfileConstraints(val ageRange: IntRange, val genders: List<String>)
+
 external interface ProfileProps : Props {
   var errorMessage: String?
   var setErrorMessage: StateSetter<String?>
   var viewMode: ViewMode
   var profileView: ProfileDTO
-  var profileConstraints: ProfileConstraintsDTO
+  var profileConstraints: ProfileConstraints
   var onSubmit: (ProfileDTO) -> Unit
 }
 
@@ -143,7 +144,7 @@ val Profile = FC<ProfileProps> { props ->
               select {
                 className = "form-select w-25"
                 id = "hornLength"
-                for (index in constraints.minHornLength..constraints.maxHornLength) {
+                for (index in constraints.ageRange) {
                   option {
                     value = "$index"
                     +"$index"

@@ -1,6 +1,5 @@
 package com.materna.entity
 
-import dto.ProfileConstraintsDTO
 import dto.ProfileDTO
 import kotlinx.datetime.toKotlinLocalDate
 import kotlinx.datetime.toKotlinLocalDateTime
@@ -38,21 +37,14 @@ data class Profile(
 
   companion object {
     enum class Gender {
-      MALE,
       FEMALE,
+      MALE,
       DIVERSE;
 
       companion object {
         val asList = values().map(Gender::toString)
       }
     }
-
-    fun toConstraintsDTO(): ProfileConstraintsDTO = ProfileConstraintsDTO(
-      minHornLength = validHornLength.first,
-      maxHornLength = validHornLength.last,
-      genders = Gender.asList
-    )
-
     val validHornLength = (0..50)
   }
 

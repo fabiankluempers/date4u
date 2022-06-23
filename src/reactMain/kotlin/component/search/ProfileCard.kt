@@ -9,15 +9,12 @@ import dto.ProfileDTO
 import io.ktor.client.call.*
 import io.ktor.client.request.*
 import kotlinx.coroutines.launch
-import react.FC
-import react.Props
+import react.*
 import react.css.css
 import react.dom.html.ReactHTML.div
 import react.dom.html.ReactHTML.h5
 import react.dom.html.ReactHTML.img
 import react.dom.html.ReactHTML.p
-import react.useEffectOnce
-import react.useState
 
 interface ProfileCardProps : Props {
   var profile: ProfileDTO
@@ -25,7 +22,7 @@ interface ProfileCardProps : Props {
 
 val ProfileCard = FC<ProfileCardProps> { props ->
   var profilePic by useState<PhotoDTO?>(null)
-  useEffectOnce {
+  useEffect(props) {
     scope.launch {
       profilePic = client
         .get("profile/${props.profile.nickname}/profile_photo")

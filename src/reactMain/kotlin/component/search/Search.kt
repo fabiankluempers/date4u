@@ -14,10 +14,13 @@ import react.dom.html.ReactHTML.div
 import react.useEffectOnce
 import react.useState
 
+private data class Constraints(val ageRange: IntRange, val hornLengthRange: IntRange, val genders: List<String>)
+
+data class ProfileFilter(val ageRange: IntRange, val hornLengthRange: IntRange, val interestedIn: Set<Int>)
+
 val Search = FC<Props> {
   var profiles by useState<List<ProfileDTO>>(listOf())
-  var ageRange by useState<IntRange?>(null)
-  var hornLengthRange by useState<IntRange?>(null)
+  var constraints by useState<Constraints?>(null)
 
   useEffectOnce {
     scope.launch {
@@ -27,32 +30,20 @@ val Search = FC<Props> {
       val hornLengthJob = async {
         client.get("/constraint/horn_length_range").body<RangeDTO>().toRange()
       }
-      ageRange = ageRangeJob.await()
-      hornLengthRange = hornLengthJob.await()
+      val genderJob = async {
+        client.get("/constraint/genders").body<List<String>>()
+      }
+      constraints = Constraints(ageRangeJob.await(), hornLengthJob.await(), genderJob.await())
     }
   }
 
   div {
     className = "container justify-content-center"
-    if (ageRange != null && hornLengthRange != null) {
+    constraints?.run {
       FilterBar {
-        filter = ProfileFilter(ageRange!!, hornLengthRange!!, setOf())
-        onSearch = {
-          scope.launch {
-            val profileJob = async {
-              client.get("/profile/search"){
-                parameter("minAge", it.ageRange.first)
-                parameter("maxAge", it.ageRange.last)
-                parameter("minHornLength", it.hornLengthRange.first)
-                parameter("maxHornLength", it.hornLengthRange.last)
-                it.interestedIn.forEach { gender ->
-                  parameter("interestedIn", gender)
-                }
-              }.body<List<ProfileDTO>>()
-            }
-            profiles = profileJob.await()
-          }
-        }
+        filter = ProfileFilter(ageRange, hornLengthRange, setOf())
+        this@FilterBar.genders = this@run.genders
+        onSearch = { scope.launch { profiles = it.fetchSearchResults() } }
       }
     }
     div {
@@ -68,3 +59,14 @@ val Search = FC<Props> {
     }
   }
 }
+
+private suspend fun ProfileFilter.fetchSearchResults() =
+  client.get("/profile/search") {
+    parameter("minAge", ageRange.first)
+    parameter("maxAge", ageRange.last)
+    parameter("minHornLength", hornLengthRange.first)
+    parameter("maxHornLength", hornLengthRange.last)
+    interestedIn.forEach { gender ->
+      parameter("interestedIn", gender)
+    }
+  }.body<List<ProfileDTO>>()
