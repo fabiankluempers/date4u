@@ -4,6 +4,7 @@ import component.auth.Login
 import component.auth.Logout
 import Welcome
 import component.profile.MyProfile
+import component.profile.OtherProfile
 import component.search.Search
 import react.FC
 import react.Props
@@ -35,6 +36,10 @@ val MyRoutes = FC<Props> {
         Route {
             path = "/search_profiles"
             element = createElement(Search)
+        }
+        Route {
+            path = "/profile/:nickname"
+            element = createElement(OtherProfile)
         }
     }
 }

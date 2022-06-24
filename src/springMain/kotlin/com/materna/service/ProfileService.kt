@@ -1,7 +1,6 @@
 package com.materna.service
 
 import com.materna.entity.Profile
-import com.materna.entity.Unicorn
 import com.materna.repository.ProfileRepository
 import com.materna.repository.UnicornRepository
 import com.materna.security.UnicornDetails
@@ -16,12 +15,29 @@ class ProfileService(
   private val profileRepository: ProfileRepository,
   private val unicornRepository: UnicornRepository,
 ) {
+  fun likesByNickname(nickname: String) = profileRepository.findLikes(nickname)
+
+  fun likersByNickname(nickname: String) = profileRepository.findLikers(nickname)
+
+  context(UnicornDetails)
+  private fun transformLikes(nickname: String, operation: (Set<Profile>, Profile) -> Set<Profile>) = runCatching {
+	val profile = unicornRepository.findUnicornByEmail(email)?.profile ?: throw UnicornNotFoundException()
+
+	val likee = profileRepository.findByNickname(nickname) ?: throw ProfileNotFoundException()
+
+	profileRepository.save(profile.copy(likes = operation(profile.likes, likee)))
+  }
+
+  context(UnicornDetails)
+  fun like(nickname: String) = transformLikes(nickname, Set<Profile>::plus)
+
+  context(UnicornDetails)
+  fun dislike(nickname: String) = transformLikes(nickname, Set<Profile>::minus)
 
   context(UnicornDetails)
   fun profileByEmail() = unicornRepository
 	.findUnicornByEmail(email)
 	?.profile
-	?.toProfileDTO()
 
   fun all() = profileRepository.findAll().toList()
 
@@ -32,10 +48,8 @@ class ProfileService(
 
 
   context(UnicornDetails) @Transactional
-  fun updateProfile(profileDTO: ProfileDTO): Result<ProfileDTO> = runCatching {
+  fun updateProfile(profileDTO: ProfileDTO): Result<Profile> = runCatching {
 	val unicorn = unicornRepository.findUnicornByEmail(email) ?: throw UnicornNotFoundException()
-
-	checkAuth(unicorn)
 
 	if (
 	  profileDTO.nickname != unicorn.profile.nickname &&
@@ -53,8 +67,6 @@ class ProfileService(
 	)
 
 	profileRepository.save(profile)
-
-	profile.toProfileDTO()
   }
 
   fun search(ageRange: IntRange, hornLengthRange: IntRange, interestedIn: Set<Short>): List<Profile> {
@@ -76,7 +88,5 @@ class ProfileService(
 	)
   }
 
-  context(UnicornDetails)
-	  private fun checkAuth(unicorn: Unicorn) =
-	if (email == unicorn.email) Unit else throw UnicornUnauthorizedException()
+  fun profileByNickname(nickname: String): Profile? = profileRepository.findByNickname(nickname)
 }

@@ -2,10 +2,7 @@ package com.materna.controller
 
 import com.materna.entity.Profile
 import com.materna.security.UnicornDetails
-import com.materna.service.ProfileService
-import com.materna.service.UnicornNotFoundException
-import com.materna.service.UnicornUnauthorizedException
-import com.materna.service.UniqueConstraintException
+import com.materna.service.*
 import dto.ErrorDTO
 import dto.ProfileDTO
 import dto.ResponseDTO
@@ -21,42 +18,54 @@ class ProfileController(private val profileService: ProfileService) {
 
   @GetMapping("/profile")
   fun myProfile(authentication: Authentication) =
-    with(authentication.unicornDetails) {
-      profileService.profileByEmail()
-    }
+	with(authentication.unicornDetails) {
+	  profileService.profileByEmail()?.toProfileDTO()
+	}
+
+  @PutMapping("/profile/like/{nickname}")
+  fun likeProfile(@PathVariable nickname: String, authentication: Authentication) =
+	with(authentication.unicornDetails) {
+	  profileService.like(nickname).map(Profile::toProfileDTO).getOrNull()
+	}
+
+  @PutMapping("/profile/dislike/{nickname}")
+  fun dislikeProfile(@PathVariable nickname: String, authentication: Authentication) =
+	with(authentication.unicornDetails) {
+	  profileService.dislike(nickname).map(Profile::toProfileDTO).getOrNull()
+	}
+
+  @GetMapping("/profile/{nickname}")
+  fun otherProfile(@PathVariable nickname: String) = profileService.profileByNickname(nickname)?.toProfileDTO()
 
   @PutMapping("/profile")
   fun updateMyProfile(authentication: Authentication, @RequestBody profile: ProfileDTO) =
-    with(authentication.unicornDetails) {
-      profileService.updateProfile(profile)
-    }.map {
-      ResponseDTO.success(it)
-    }.getOrElse {
-      ResponseDTO.failure(
-        when (it) {
-          is UniqueConstraintException -> it.toErrorDTO()
-          else -> ErrorDTO(error = "Internal server error")
-        }
-      )
-    }
+	with(authentication.unicornDetails) {
+	  profileService.updateProfile(profile)
+	}.map {
+	  ResponseDTO.success(it.toProfileDTO())
+	}.getOrElse {
+	  ResponseDTO.failure(
+		when (it) {
+		  is UniqueConstraintException -> it.toErrorDTO()
+		  else                         -> ErrorDTO(error = "Internal server error.")
+		}
+	  )
+	}
 
-  @GetMapping("/profile/all")
-  fun profiles() = profileService.all().map(Profile::toProfileDTO)
-
-  @GetMapping("/profile/search")
+  @GetMapping("/search")
   fun search(
-    @RequestParam minAge: Int,
-    @RequestParam maxAge: Int,
-    @RequestParam minHornLength: Int,
-    @RequestParam maxHornLength: Int,
-    @RequestParam interestedIn: List<Short>?,
+	@RequestParam minAge: Int,
+	@RequestParam maxAge: Int,
+	@RequestParam minHornLength: Int,
+	@RequestParam maxHornLength: Int,
+	@RequestParam interestedIn: List<Short>?,
   ) = profileService.search(
-    ageRange = minAge..maxAge,
-    hornLengthRange = minHornLength..maxHornLength,
-    interestedIn = interestedIn?.toSet() ?: setOf()
+	ageRange = minAge..maxAge,
+	hornLengthRange = minHornLength..maxHornLength,
+	interestedIn = interestedIn?.toSet() ?: setOf()
   ).map(Profile::toProfileDTO)
 
 
   private val Authentication.unicornDetails
-    get() = principal as UnicornDetails
+	get() = principal as UnicornDetails
 }

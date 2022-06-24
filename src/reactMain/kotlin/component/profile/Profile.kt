@@ -142,8 +142,9 @@ val Profile = FC<ProfileProps> { props ->
                 +"Horn length"
               }
               select {
-                className = "form-select w-25"
                 id = "hornLength"
+                className = if (isReadOnly) "form-control-plaintext w-25" else "form-control w-25"
+                disabled = isReadOnly
                 for (index in constraints.ageRange) {
                   option {
                     value = "$index"

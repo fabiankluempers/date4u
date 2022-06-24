@@ -15,6 +15,7 @@ import react.dom.html.ReactHTML.div
 import react.dom.html.ReactHTML.h5
 import react.dom.html.ReactHTML.img
 import react.dom.html.ReactHTML.p
+import react.router.dom.NavLink
 
 interface ProfileCardProps : Props {
   var profile: ProfileDTO
@@ -29,7 +30,8 @@ val ProfileCard = FC<ProfileCardProps> { props ->
         .body<PhotoDTO?>()
     }
   }
-  div {
+  NavLink {
+    to = "/profile/${props.profile.nickname}"
     css { width = 18.rem }
     className += " card"
     if (profilePic != null) {

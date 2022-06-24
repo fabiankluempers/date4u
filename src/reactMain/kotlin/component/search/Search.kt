@@ -61,7 +61,7 @@ val Search = FC<Props> {
 }
 
 private suspend fun ProfileFilter.fetchSearchResults() =
-  client.get("/profile/search") {
+  client.get("/search") {
     parameter("minAge", ageRange.first)
     parameter("maxAge", ageRange.last)
     parameter("minHornLength", hornLengthRange.first)

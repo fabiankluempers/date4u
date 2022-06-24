@@ -22,3 +22,5 @@ suspend fun HttpClient.saveProfile(profileDTO: ProfileDTO) =
   }
 
 suspend fun HttpClient.fetchMyProfile() = get("/profile").body<ProfileDTO>()
+
+suspend fun HttpClient.fetchProfile(nickname: String) = get("/profile/$nickname").body<ProfileDTO>()

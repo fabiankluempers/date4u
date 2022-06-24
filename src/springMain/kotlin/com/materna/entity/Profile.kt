@@ -3,6 +3,7 @@ package com.materna.entity
 import dto.ProfileDTO
 import kotlinx.datetime.toKotlinLocalDate
 import kotlinx.datetime.toKotlinLocalDateTime
+import kotlinx.html.VAR_
 import org.hibernate.Hibernate
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -30,9 +31,27 @@ data class Profile(
   @OneToOne(mappedBy = "profile")
   val unicorn: Unicorn,
 
+  @ManyToMany(cascade = [CascadeType.ALL])
+  @JoinTable(
+    name = "likes",
+    joinColumns = [JoinColumn(name = "likee_fk")],
+    inverseJoinColumns = [JoinColumn(name = "liker_fk")]
+  )
+  val likes: Set<Profile>,
+
+  @ManyToMany(mappedBy = "likes", cascade = [CascadeType.ALL])
+  @JoinTable(
+    name = "likes",
+    joinColumns = [JoinColumn(name = "liker_fk")],
+    inverseJoinColumns = [JoinColumn(name = "likee_fk")]
+  )
+  val likers: Set<Profile>,
+
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   val id: Long? = null,
+
+
 ) {
 
   companion object {
