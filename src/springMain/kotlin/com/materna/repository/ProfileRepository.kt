@@ -1,19 +1,16 @@
 package com.materna.repository
 
 import com.materna.entity.Profile
-import dto.ProfileDTO
-import net.bytebuddy.implementation.bytecode.collection.ArrayLength
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
 import java.time.LocalDate
 
 interface ProfileRepository : JpaRepository<Profile, Long> {
 
-  @Query("select profile from Profile.likers profile where profile.nickname = :nickname")
-  fun findLikers(nickname: String): List<ProfileDTO>
-
-  @Query("select profile from Profile.likes profile where profile.nickname = :nickname")
-  fun findLikes(nickname: String): List<ProfileDTO>
+  @Query("select profile.likers from Profile profile where profile.nickname = :nickname")
+  fun findLikersByNickname(nickname: String): List<Profile>
+  @Query("select profile.likees from Profile profile where profile.nickname = :nickname")
+  fun findLikeesByNickname(nickname: String): List<Profile>
 
   fun existsByNickname(nickname: String): Boolean
 

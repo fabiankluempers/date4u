@@ -22,6 +22,9 @@ class ProfileController(private val profileService: ProfileService) {
 	  profileService.profileByEmail()?.toProfileDTO()
 	}
 
+  @GetMapping("/profile/{nickname}/likers")
+  fun likers(@PathVariable nickname: String) = profileService.likersByNickname(nickname).map(Profile::toProfileDTO)
+
   @PutMapping("/profile/like/{nickname}")
   fun likeProfile(@PathVariable nickname: String, authentication: Authentication) =
 	with(authentication.unicornDetails) {

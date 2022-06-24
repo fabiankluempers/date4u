@@ -15,9 +15,9 @@ class ProfileService(
   private val profileRepository: ProfileRepository,
   private val unicornRepository: UnicornRepository,
 ) {
-  fun likesByNickname(nickname: String) = profileRepository.findLikes(nickname)
+  fun likesByNickname(nickname: String) = profileRepository.findLikeesByNickname(nickname)
 
-  fun likersByNickname(nickname: String) = profileRepository.findLikers(nickname)
+  fun likersByNickname(nickname: String) = profileRepository.findLikersByNickname(nickname)
 
   context(UnicornDetails)
   private fun transformLikes(nickname: String, operation: (Set<Profile>, Profile) -> Set<Profile>) = runCatching {
@@ -25,7 +25,7 @@ class ProfileService(
 
 	val likee = profileRepository.findByNickname(nickname) ?: throw ProfileNotFoundException()
 
-	profileRepository.save(profile.copy(likes = operation(profile.likes, likee)))
+	profileRepository.save(profile.copy(likees = operation(profile.likees, likee)))
   }
 
   context(UnicornDetails)
